@@ -184,7 +184,7 @@
         <!-- 导航 -->
         <ul class="nav">
             <li>
-                <a href="#">首页</a>
+                <a href="/index">首页</a>
             </li>
             <li>
                 <a href="#">浏览</a>
