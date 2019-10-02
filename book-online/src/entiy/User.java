@@ -20,8 +20,7 @@ public class User {
         this.avatar = avatar;
     }
 
-    public User(){
-
+    public User() {
     }
 
     public String getAccount() {

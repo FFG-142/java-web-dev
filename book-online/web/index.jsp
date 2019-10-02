@@ -1,6 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="entiy.Book" %>
-<%@ page import="entiy.User" %><%--
+<%@ page import="entiy.User" %>
+<%--
   Created by IntelliJ IDEA.
   User: HASEE
   Date: 2019/9/24
@@ -174,6 +175,9 @@
   </style>
 </head>
 <body>
+<%
+    List<Book> bookList = (List<Book>) request.getAttribute("bookList");
+%>
 <!-- 顶部导航 -->
 <header>
   <div>
@@ -215,7 +219,7 @@
         <%
         } else {
         %>
-        <a href="${pageContext.request.contextPath}/sign_in.html" class="font4"><input type="submit" value="登录" class="button"></a>
+        <a href="${pageContext.request.contextPath}/login.html" class="font4"><input type="submit" value="登录" class="button"></a>
         <%
             }
         %>
@@ -228,21 +232,19 @@
   <input type="text" placeholder="输入要搜索的内容" class="input-box">
     <input type="submit" value="搜索" class="button">
 </div>
-<%
-  List<Book> bookList= (List<Book>) request.getAttribute("bookList");
-  pageContext.setAttribute("size",bookList.size());
-%>
 <!-- 主题内容区 -->
 <div class="container">
   <div class="left">
     <h1>好书精选<hr/></h1>
         <div class="row">
-      <%
-      for(Book book:bookList){
-      pageContext.setAttribute("book",book);
-      %>
+            <%
+                for (Book book : bookList) {
+                    pageContext.setAttribute("book", book);
+            %>
       <div class="column">
-          <a href="bookinfo.jsp"><img src="images/${book.cover}" class="imga" alt=""></a>
+          <a href="${pageContext.request.contextPath}/detail/${book.id}">
+              <img src="images/${book.cover}" class="imga" alt="">
+          </a>
         <p class="font1">${book.name}</p>
         <p class="font1">${book.author}</p>
       </div>

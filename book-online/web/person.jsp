@@ -69,9 +69,6 @@
             margin-right: 0.625rem;
             width: 50px;
         }
-        .user-info{
-            padding-right:20px;
-        }
         /* 超链接样式 */
         .nav li a{
             text-decoration:none;

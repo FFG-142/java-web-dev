@@ -1,5 +1,9 @@
 package servlet;
 
+import entiy.User;
+import service.UserService;
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -7,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * @author kuon-chitose
@@ -22,20 +28,30 @@ public class LoginServlet extends HttpServlet {
         //处理请求乱码
         req.setCharacterEncoding("UTF-8");
         //通过req请求参数获取前台表单的用户名参数
-        String username = req.getParameter("username");
-        //取得密码参数
+        String account = req.getParameter("account");
         String password = req.getParameter("password");
-        //账号密码正确
-        if ("admin".equals(username) && "111".equals(password)) {
-            //通过request对象获取session会话对象
+        UserService userService = new UserService();
+        //获得用户列表数据
+        ServletContext sc = this.getServletContext();
+        List<User> userList = (List<User>) sc.getAttribute("userList");
+        //将数据传到userService
+        userService.setUserList(userList);
+        //调用登录功能
+        User user = userService.signIn(account,password);
+        if (user != null) {
+            //登录成功，将用户对象记入session
             HttpSession session = req.getSession();
-            //把用户名存入session对象
-            session.setAttribute("username", username);
-            //进行重定向跳转（客户端跳转）
-            resp.sendRedirect("/index.jsp");
-        }else {
-            //账号或密码错误，跳转到登陆页面
-            resp.sendRedirect("/login.html");
+            session.setAttribute("user", user);
+            //重定向到/index，进入IndexServlet
+            resp.sendRedirect("/index");
+        } else {
+            //登录失败，设置好响应对象字符集和响应类型
+            resp.setContentType("text/html;charset=UTF-8");
+            resp.setCharacterEncoding("UTF-8");
+            //获得response对象的字符输出流
+            PrintWriter out = resp.getWriter();
+            //输出js脚本，弹出登录失败的信息
+            out.print("<script>alert('账号或密码错误');location.href='/';</script>");
         }
     }
 }
